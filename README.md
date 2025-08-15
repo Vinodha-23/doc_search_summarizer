@@ -3,6 +3,10 @@
 This project is a local document search and summarization system that uses FAISS for efficient similarity search, Ollama embeddings for vectorization, and an LLM backend (via Ollama) for query understanding and summarization.
 
 The project features a frontend interface (HTML + JavaScript) that can be hosted on GitHub Pages for easy access, while the backend runs locally.
+## 🌐 Live Demo (Frontend Only)
+Access the live interface here:  
+**[https://vinodha-23.github.io/doc_search_summarizer/](https://vinodha-23.github.io/doc_search_summarizer/)**
+
 
 ------------------------------------------------------------
 🚀 Features
