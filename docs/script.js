@@ -1,16 +1,13 @@
-// --- API base (GitHub Pages calls your local server) ---
 const API_BASE = (window.location.hostname.endsWith("github.io"))
-  ? "http://127.0.0.1:5000"  // when opened from GitHub Pages
-  : "";                      // when served by Flask locally
+  ? "http://127.0.0.1:5000"  
+  : "";                      
 
-// Then replace fetch("/search"...) with fetch(`${API_BASE}/search`, ...)
-// and same for /summarize, /suggest, /health
+
 
 let fullResults = [];
-const resultsPerPage = 1;  // 1 document per page
+const resultsPerPage = 1;  
 let currentPage = 1;
 
-// ---------------------- Utility Functions ----------------------
 const predefinedSuggestions =[
   "Who is Daniel Radcliffe and why is he famous?",
   "What did Daniel Radcliffe do when he turned 18?",
@@ -41,20 +38,17 @@ function toggleTheme() {
   localStorage.setItem('theme', theme);
 }
 
-// Highlight query in snippet
 function highlightText(snippet) {
   const query = document.getElementById("query")?.value.trim();
   if (!query) return snippet;
   return snippet.replace(new RegExp(query, "gi"), match => `<mark class='bg-yellow-200'>${match}</mark>`);
 }
 
-// Show / hide loading spinner
 function showLoading(show) {
   const loading = document.getElementById("loadingMessage");
   if (loading) loading.classList.toggle("hidden", !show);
 }
 
-// Update local query history
 function updateHistory(query) {
   const history = JSON.parse(localStorage.getItem("queryHistory") || "[]");
   if (!history.includes(query)) {
@@ -69,7 +63,6 @@ function suggestQueries() {
   
   const query = input.value.toLowerCase();
   
-  // Merge history and predefined
   const history = JSON.parse(localStorage.getItem("queryHistory") || "[]");
   const allSuggestions = [...new Set([...predefinedSuggestions, ...history])];
 
@@ -96,25 +89,20 @@ function suggestQueries() {
     container.appendChild(div);
   });
 }
-// ---------------------- Pagination ----------------------
 function setupPagination() {
   const container = document.getElementById("pagination");
   if (!container) return;
 
   const totalPages = Math.ceil(fullResults.length / resultsPerPage);
 
-  // Pagination always visible
   container.classList.remove("hidden");
 
-  // Disable Prev/Next buttons when needed
   document.getElementById("prevPage").disabled = currentPage === 1;
   document.getElementById("nextPage").disabled = currentPage === totalPages;
 
-  // Update page info
   document.getElementById("pageInfo").textContent = ` Page ${currentPage} of ${totalPages} `;
 }
 
-// Change page
 function changePage(page) {
   const totalPages = Math.ceil(fullResults.length / resultsPerPage);
   if (page < 1 || page > totalPages) return;
@@ -123,7 +111,6 @@ function changePage(page) {
   setupPagination();
 }
 
-// ---------------------- Display Results ----------------------
 function displayResults() {
   const container = document.getElementById("results");
   if (!container) return;
@@ -151,7 +138,6 @@ function displayResults() {
   });
 }
 
-// ---------------------- Main Function ----------------------
 function searchAndSummarize() {
   const queryInput = document.getElementById("query");
   const summaryLengthSelect = document.getElementById("summaryLength");
@@ -175,7 +161,6 @@ function searchAndSummarize() {
   resultsContainer.innerHTML = "";
   paginationDiv.classList.add("hidden");
 
-  // Fetch search results
   fetch("/search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
